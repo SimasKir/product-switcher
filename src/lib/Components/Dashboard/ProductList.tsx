@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
@@ -39,6 +39,21 @@ function ProductList({ products }: ProductListProps) {
       );
     }
   };
+
+  useEffect(() => {
+    const eventSource = new EventSource('https://products-switcher-api.onrender.com/events');
+
+    eventSource.onmessage = (event) => {
+      const updatedProducts = JSON.parse(event.data);
+      setProductList(updatedProducts); // Update the product list
+    };
+
+    // Clean up the connection when component unmounts
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
   return (
     <div className='flex '>
       <ul>
