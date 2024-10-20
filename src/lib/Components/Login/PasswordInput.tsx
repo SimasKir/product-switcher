@@ -1,20 +1,22 @@
-import { useState } from "react"
  
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "@/components/ui/input-otp"
+} from "@/components/ui/input-otp";
+import { Label } from "@/components/ui/label";
+
  
-function PasswordInput() {
-  const [value, setValue] = useState("")
+function PasswordInput({setPass, pass}: {setPass: (password: string) => void, pass: string}) {
  
   return (
     <div className="space-y-2">
+      <Label>Password</Label>
       <InputOTP
         maxLength={6}
-        value={value}
-        onChange={(value) => setValue(value)}
+        value={pass}
+        onChange={(value) => setPass(value)}
+        className="flex flex-column"
       >
         <InputOTPGroup>
           <InputOTPSlot index={0} />
