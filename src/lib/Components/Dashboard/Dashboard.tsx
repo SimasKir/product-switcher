@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState, useCallback } from 'react';
 import getData from '@/lib/utils/getData';
 import ProductList from './ProductList';
+import TakenProducts from './TakenProducts';
 
 function Dashboard() {
     const [products, setProducts] = useState([]);
@@ -29,17 +30,27 @@ function Dashboard() {
     console.log(products);
 
     return (
-        <>
-            { userCookie ? <h1>Hello, {userCookie}</h1> : <h1>Error logging in</h1> }
+        <div className='container mx-auto h-screen'>
+            { userCookie ? <h1 className='my-4'>Hello, {userCookie}</h1> : <h1 className='my-4'>Error logging in</h1> }
+            <div className="grid grid-cols-2 gap-4">
+              {loading ? (
+                  <p>Loading products...</p>
+              ) : error ? (
+                  <p>{error?.message}</p>
+              ) : (
+                  <ProductList products={products} />
+              )}
+              {loading ? (
+                  <p>Loading products...</p>
+              ) : error ? (
+                  <p>{error?.message}</p>
+              ) : (
+                <TakenProducts products={products}/>
+              )}
+            </div>
 
-            {loading ? (
-                <p>Loading products...</p>
-            ) : error ? (
-                <p>{error?.message}</p>
-            ) : (
-                <ProductList products={products} />
-            )}
-        </>
+            
+        </div>
     );
 }
 

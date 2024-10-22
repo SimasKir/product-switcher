@@ -1,4 +1,4 @@
-async function updateData(url: string, data: { product: string; state: string }) {
+async function updateData(url: string, data: { product: string; state: string, owner: string }) {
     try {
       const response = await fetch(url, {
         method: 'PUT', 

@@ -1,43 +1,53 @@
 import { useState, useEffect } from "react";
+import Cookies from 'js-cookie';
 
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 
 import updateData from "@/lib/utils/updateData";
 
-type ProductListProps = {
+export type ProductListProps = {
   products: Product[];
 }
 
-type Product = {
+export type Product = {
   product: string;
   state: "active" | "inactive";
+  owner: string;
 }
+
+const userCookie = Cookies.get('IBAUTH') || "";
 
 function ProductList({ products }: ProductListProps) {
 
   const [ productList, setProductList] = useState(products);
 
+  console.log(productList);
+
   const switchProductState = async (product: Product) => {
     const newState = product.state === "active" ? "inactive" : "active";
-    
+    const newOwner = newState === "inactive" ? "none" : userCookie;
+
     setProductList(prevProducts => 
-      prevProducts.map(p => p.product === product.product ? { ...p, state: newState } : p)
+      prevProducts.map(p => p.product === product.product ? { ...p, state: newState, owner: newOwner } : p)
     );
 
     try {
       await updateData('https://products-switcher-api.onrender.com/json', {
         product: product.product,
         state: newState,
+        owner: newOwner
       });
       console.log(`Successfully updated product ${product.product} to ${newState}`);
     } catch (error) {
       console.error(`Failed to update product ${product.product}`, error);
       
       setProductList(prevProducts => 
-        prevProducts.map(p => p.product === product.product ? { ...p, state: product.state } : p)
+        prevProducts.map(p => p.product === product.product ? { ...p, state: product.state, owner: newOwner } : p)
       );
     }
+
+    console.log(newOwner);
   };
 
   useEffect(() => {
@@ -55,11 +65,12 @@ function ProductList({ products }: ProductListProps) {
   }, []);
 
   return (
-    <div className='flex '>
+    (<Card className='flex flex-col'>
+      <h2 className="my-4">All products</h2>
       <ul>
         {productList.map((product) => (
-          <li key={product.product}>
-            <Card className="flex items-center justify-between px-3 py-2">
+          <li key={product.product} className="m-2">
+            <Card className={`flex items-center justify-between px-3 py-2 ${product.state === 'active' && "bg-red-200"}`}>
               <span>{product.product}</span>
               <Switch 
                 className="ml-2" 
@@ -70,8 +81,8 @@ function ProductList({ products }: ProductListProps) {
           </li>
         ))}
       </ul>
-    </div>
-  )
+    </Card>)
+  );
 }
 
 export default ProductList
