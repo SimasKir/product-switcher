@@ -25,6 +25,11 @@ function ProductList({ products }: ProductListProps) {
   console.log(productList);
 
   const switchProductState = async (product: Product) => {
+    if ( product.state !== "inactive" && product.owner !== userCookie) {
+      alert(`Only correct owner can update ${product.product}`);
+      return;
+    } 
+
     const newState = product.state === "active" ? "inactive" : "active";
     const newOwner = newState === "inactive" ? "none" : userCookie;
 
@@ -46,8 +51,6 @@ function ProductList({ products }: ProductListProps) {
         prevProducts.map(p => p.product === product.product ? { ...p, state: product.state, owner: newOwner } : p)
       );
     }
-
-    console.log(newOwner);
   };
 
   useEffect(() => {
