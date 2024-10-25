@@ -27,7 +27,7 @@ function Dashboard() {
 
     const userCookie = Cookies.get('IBAUTH');
 
-    console.log(products);
+    console.log('dash' + userCookie)
 
     return (
         <div className='container mx-auto h-screen'>

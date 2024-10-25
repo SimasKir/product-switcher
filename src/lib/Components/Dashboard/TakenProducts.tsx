@@ -21,10 +21,7 @@ const TakenProducts = ({ products }: ProductListProps) => {
         return () => {
           eventSource.close();
         };
-      }, []);
-
-      console.log(productList);
-    
+      }, []);    
 
     return (
         <Card className='flex flex-col'>

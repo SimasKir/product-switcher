@@ -18,6 +18,8 @@ export type Product = {
 
 const userCookie = Cookies.get('IBAUTH') || "";
 
+console.log(userCookie);
+
 function ProductList({ products }: ProductListProps) {
 
   const [ productList, setProductList] = useState(products);
@@ -25,15 +27,11 @@ function ProductList({ products }: ProductListProps) {
   console.log(productList);
 
   const switchProductState = async (product: Product) => {
-    // if ( product.state === "active" && product.owner !== userCookie) {
-    //   alert(`Only correct owner can update ${product.product}`);
-    //   return;
-    // } 
 
     const newState = product.state === "active" ? "inactive" : "active";
     const newOwner = product.state === "active" ? "none" : userCookie;
 
-    console.log(userCookie);
+    console.log('switch' + userCookie);
 
     setProductList(prevProducts => 
       prevProducts.map(p => p.product === product.product ? { ...p, state: newState, owner: newOwner } : p)
