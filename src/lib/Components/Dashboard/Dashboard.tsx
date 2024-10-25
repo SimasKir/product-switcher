@@ -27,8 +27,6 @@ function Dashboard() {
 
     const userCookie = Cookies.get('IBAUTH');
 
-    console.log('dash' + userCookie)
-
     return (
         <div className='container mx-auto h-screen'>
             { userCookie ? <h1 className='my-4'>Hello, {userCookie}</h1> : <h1 className='my-4'>Error logging in</h1> }

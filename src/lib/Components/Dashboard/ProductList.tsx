@@ -22,7 +22,8 @@ function ProductList({ products }: ProductListProps) {
   const switchProductState = async (product: Product) => {
 
     const userCookie = Cookies.get('IBAUTH');
-    if (userCookie) {
+
+    if (userCookie && typeof userCookie === "string" && (product.owner === userCookie || product.owner === "none")) {
       const newState = product.state === "active" ? "inactive" : "active";
     
       const newOwner = product.state === "active" ? "none" : userCookie;
@@ -46,6 +47,7 @@ function ProductList({ products }: ProductListProps) {
         );
       }
     } else {
+      alert(`${product.product} can only be updated by owner`)
       return;
     }
   };
@@ -55,10 +57,9 @@ function ProductList({ products }: ProductListProps) {
 
     eventSource.onmessage = (event) => {
       const updatedProducts = JSON.parse(event.data);
-      setProductList(updatedProducts); // Update the product list
+      setProductList(updatedProducts);
     };
 
-    // Clean up the connection when component unmounts
     return () => {
       eventSource.close();
     };
