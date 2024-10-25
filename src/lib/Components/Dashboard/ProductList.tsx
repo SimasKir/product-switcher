@@ -25,13 +25,15 @@ function ProductList({ products }: ProductListProps) {
   console.log(productList);
 
   const switchProductState = async (product: Product) => {
-    if ( product.state !== "inactive" && product.owner !== userCookie) {
+    if ( product.state === "active" && product.owner !== userCookie) {
       alert(`Only correct owner can update ${product.product}`);
       return;
     } 
 
     const newState = product.state === "active" ? "inactive" : "active";
-    const newOwner = newState === "inactive" ? "none" : userCookie;
+    const newOwner = newState === userCookie ? "none" : userCookie;
+
+    console.log(newOwner);
 
     setProductList(prevProducts => 
       prevProducts.map(p => p.product === product.product ? { ...p, state: newState, owner: newOwner } : p)
