@@ -16,40 +16,37 @@ export type Product = {
   owner: string;
 }
 
-const userCookie = Cookies.get('IBAUTH') || "";
-
-console.log(userCookie);
-
 function ProductList({ products }: ProductListProps) {
 
   const [ productList, setProductList] = useState(products);
-
-  console.log(productList);
-
   const switchProductState = async (product: Product) => {
 
-    const newState = product.state === "active" ? "inactive" : "active";
-    const newOwner = product.state === "active" ? "none" : userCookie;
-
-    console.log('switch' + userCookie);
-
-    setProductList(prevProducts => 
-      prevProducts.map(p => p.product === product.product ? { ...p, state: newState, owner: newOwner } : p)
-    );
-
-    try {
-      await updateData('https://products-switcher-api.onrender.com/json', {
-        product: product.product,
-        state: newState,
-        owner: newOwner
-      });
-      console.log(`Successfully updated product ${product.product} to ${newState}`);
-    } catch (error) {
-      console.error(`Failed to update product ${product.product}`, error);
+    const userCookie = Cookies.get('IBAUTH');
+    if (userCookie) {
+      const newState = product.state === "active" ? "inactive" : "active";
+    
+      const newOwner = product.state === "active" ? "none" : userCookie;
       
       setProductList(prevProducts => 
-        prevProducts.map(p => p.product === product.product ? { ...p, state: product.state, owner: newOwner } : p)
+        prevProducts.map(p => p.product === product.product ? { ...p, state: newState, owner: newOwner } : p)
       );
+  
+      try {
+        await updateData('https://products-switcher-api.onrender.com/json', {
+          product: product.product,
+          state: newState,
+          owner: newOwner
+        });
+        console.log(`Successfully updated product ${product.product} to ${newState}`);
+      } catch (error) {
+        console.error(`Failed to update product ${product.product}`, error);
+        
+        setProductList(prevProducts => 
+          prevProducts.map(p => p.product === product.product ? { ...p, state: product.state, owner: newOwner } : p)
+        );
+      }
+    } else {
+      return;
     }
   };
 

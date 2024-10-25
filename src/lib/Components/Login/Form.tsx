@@ -8,6 +8,8 @@ import { Card } from "@/components/ui/card";
 import PasswordInput from "./PasswordInput";
 import NameInput from "./NameInput";
 
+Cookies.remove('IBAUTH');
+
 const setCookie = (name: string) => {
     Cookies.set('IBAUTH', `${name}`, { expires: 1 });
 }
