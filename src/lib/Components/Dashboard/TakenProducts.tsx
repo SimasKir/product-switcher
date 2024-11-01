@@ -14,9 +14,6 @@ const TakenProducts = ({ products }: ProductListProps) => {
 
     const [ productList, setProductList] = useState<Product[]>([]);
 
-    console.log(products);
-    console.log(productList);
-
     useEffect(() => {
         const eventSource = new EventSource('https://products-switcher-api.onrender.com/events');
     

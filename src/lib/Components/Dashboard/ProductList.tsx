@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
 
 import updateData from "@/lib/utils/updateData";
+import updateComments from "@/lib/utils/updateComments";
 
 export type ProductListProps = {
   products: Product[];
@@ -45,6 +46,11 @@ function ProductList({ products }: ProductListProps) {
           state: newState,
           owner: newOwner
         });
+
+        await updateComments('https://products-switcher-api.onrender.com/comments', {
+          comment: `Successfully updated product ${product.product} to ${newState} by ${userCookie}`
+        });
+
         console.log(`Successfully updated product ${product.product} to ${newState}`);
       } catch (error) {
         console.error(`Failed to update product ${product.product}`, error);
