@@ -15,7 +15,6 @@ async function updateComments(url: string, data: { comment: string }) {
     }
 
     const result = await response.json();
-    console.log(result);
     return result;
   } catch (error) {
     console.error('Error updating data:', error);

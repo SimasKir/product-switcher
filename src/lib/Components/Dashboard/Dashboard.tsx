@@ -4,6 +4,8 @@ import ProductList from './ProductList';
 import TakenProducts from './TakenProducts';
 import { DataContext } from '@/lib/Context/DataContext';
 import Comments from './Comments';
+import { Button } from '@/components/ui/button';
+import deleteComments from '@/lib/utils/deleteComments';
 
 function Dashboard() {
 
@@ -14,7 +16,13 @@ function Dashboard() {
       fetchCommentsData();
     }, []);
 
-    console.log(comments);
+    const flushComments = async () => {
+      try {
+        await deleteComments('https://products-switcher-api.onrender.com/comments');
+      } catch (error) {
+        console.error('Failed to flush comments', error);
+      }
+    }
 
     const userCookie = Cookies.get('IBAUTH');
 
@@ -36,6 +44,7 @@ function Dashboard() {
             </div>
             <div className="grid grid-cols-1 px-4">
               <Comments comments={comments}/>
+              <Button variant="outline" onClick={() => flushComments()}>Flush comments</Button>
             </div>
             
         </div>
