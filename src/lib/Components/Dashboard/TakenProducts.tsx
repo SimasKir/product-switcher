@@ -5,9 +5,17 @@ import { Card } from "@/components/ui/card";
 
 const TakenProducts = ({ products }: ProductListProps) => {
 
-    const inactiveProducts = products.filter((product : Product) => product.state === 'active');
+    useEffect(() => {
+        if (products) {
+            const inactiveProducts = products.filter((product : Product) => product.state === 'active');
+            setProductList(inactiveProducts);
+        }
+      }, [products]);
 
-    const [ productList, setProductList] = useState(inactiveProducts);
+    const [ productList, setProductList] = useState<Product[]>([]);
+
+    console.log(products);
+    console.log(productList);
 
     useEffect(() => {
         const eventSource = new EventSource('https://products-switcher-api.onrender.com/events');
@@ -15,7 +23,7 @@ const TakenProducts = ({ products }: ProductListProps) => {
         eventSource.onmessage = (event) => {
           const updatedProducts = JSON.parse(event.data);
           const inactiveProducts = updatedProducts.filter((product : Product) => product.state === 'active');
-          setProductList(inactiveProducts); // Update the product list
+          setProductList(inactiveProducts);
         };
     
         return () => {

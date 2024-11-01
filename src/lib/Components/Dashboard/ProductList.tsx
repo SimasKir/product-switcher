@@ -18,7 +18,14 @@ export type Product = {
 
 function ProductList({ products }: ProductListProps) {
 
-  const [ productList, setProductList] = useState(products);
+  const [ productList, setProductList] = useState<Product[]>(products);
+
+  useEffect(() => {
+    if (products) {
+      setProductList(products);
+    }
+  }, [products]);
+
   const switchProductState = async (product: Product) => {
 
     const userCookie = Cookies.get('IBAUTH');

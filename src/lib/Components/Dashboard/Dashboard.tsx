@@ -1,29 +1,16 @@
 import Cookies from 'js-cookie';
-import { useEffect, useState, useCallback } from 'react';
-import getData from '@/lib/utils/getData';
+import { useEffect, useContext } from 'react';
 import ProductList from './ProductList';
 import TakenProducts from './TakenProducts';
+import { DataContext } from '@/lib/Context/DataContext';
 
 function Dashboard() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<null | Error>(null);
 
-    const fetchProducts = useCallback(async () => {
-        try {
-          const productsResponse = await getData('https://products-switcher-api.onrender.com/json');
-          setProducts(productsResponse ?? []);
-        } catch (error) {
-          setError(error as Error);
-        } finally {
-          setLoading(false);
-        }
-      }, []);
-    
-      useEffect(() => {
-        fetchProducts();
-      }, [fetchProducts]);
-
+    const { products, fetchProductsData } = useContext(DataContext) as { products: any, fetchProductsData: () => Promise<any> };
+  
+    useEffect(() => {
+      fetchProductsData();
+    }, []);
 
     const userCookie = Cookies.get('IBAUTH');
 
@@ -31,19 +18,16 @@ function Dashboard() {
         <div className='container mx-auto h-screen'>
             { userCookie ? <h1 className='my-4'>Hello, {userCookie}</h1> : <h1 className='my-4'>Error logging in</h1> }
             <div className="grid grid-cols-2 gap-4">
-              {loading ? (
-                  <p>Loading products...</p>
-              ) : error ? (
-                  <p>{error?.message}</p>
+              {products ? (
+                <ProductList products={products} />
               ) : (
-                  <ProductList products={products} />
+                <p>Loading products...</p>
               )}
-              {loading ? (
-                  <p>Loading products...</p>
-              ) : error ? (
-                  <p>{error?.message}</p>
+              {products ? (
+                  
+                  <TakenProducts products={products}/>
               ) : (
-                <TakenProducts products={products}/>
+                <p>Loading products...</p>
               )}
             </div>
 
