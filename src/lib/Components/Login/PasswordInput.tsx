@@ -10,13 +10,13 @@ import { Label } from "@/components/ui/label";
 function PasswordInput({setPass, pass}: {setPass: (password: string) => void, pass: string}) {
  
   return (
-    <div className="space-y-2">
+    <div className="space-y-3 text-white text-left">
       <Label>Password</Label>
       <InputOTP
         maxLength={6}
         value={pass}
         onChange={(value) => setPass(value)}
-        className="flex flex-column"
+        className="flex flex-column text-white"
       >
         <InputOTPGroup>
           <InputOTPSlot index={0} />
