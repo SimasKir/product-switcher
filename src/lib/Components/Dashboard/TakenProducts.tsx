@@ -29,13 +29,13 @@ const TakenProducts = ({ products }: ProductListProps) => {
       }, []);    
 
     return (
-        <Card className='flex flex-col'>
-            <h2 className="my-4">Active products</h2>
+        <Card className='flex flex-col bg-white/10 border-none'>
+            <h2 className="my-4 text-ib-light font-black uppercase">Active products</h2>
             <ul>
                 {productList && productList.map((product) => (
                     <li key={product.product} className="m-2">
-                        <Card className="flex items-center justify-between px-3 py-2">
-                            <span>{product.product}</span>
+                        <Card className="flex items-center justify-between px-3 py-2 border-none bg-white/20 text-ib-light">
+                            <span>{product.brand} {product.product}</span>
                             <span>{product.owner !== "none" && product.owner}</span>
                         </Card>
                     </li>

@@ -15,6 +15,7 @@ export default {
   		colors: {
 			'ib-dark': '#191919',
 			'ib-secondary': '#0902d2',
+			'ib-light': 'rgb(209 200 227)',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import updateData from "@/lib/utils/updateData";
 import updateComments from "@/lib/utils/updateComments";
@@ -12,18 +13,26 @@ export type ProductListProps = {
 }
 
 export type Product = {
+  brand: string,
   product: string;
+  repo: string,
   state: "active" | "inactive";
   owner: string;
 }
 
+type brandLisType = string[];
+
 function ProductList({ products }: ProductListProps) {
 
   const [ productList, setProductList] = useState<Product[]>(products);
+  const [ brands, setBrands ] = useState<brandLisType>([]);
 
   useEffect(() => {
     if (products) {
       setProductList(products);
+
+      const brands = new Set(products.map(product => product.brand));
+      setBrands([...brands]);
     }
   }, [products]);
 
@@ -48,7 +57,7 @@ function ProductList({ products }: ProductListProps) {
         });
 
         await updateComments('https://products-switcher-api.onrender.com/comments', {
-          comment: `Successfully updated product ${product.product} to ${newState} by ${userCookie}`
+          comment: `${product.brand} ${product.product} set to ${newState} by ${userCookie}`
         });
 
         console.log(`Successfully updated product ${product.product} to ${newState}`);
@@ -79,22 +88,29 @@ function ProductList({ products }: ProductListProps) {
   }, []);
 
   return (
-    (<Card className='flex flex-col'>
-      <h2 className="my-4">All products</h2>
-      <ul>
-        {productList.map((product) => (
-          <li key={product.product} className="m-2">
-            <Card className={`flex items-center justify-between px-3 py-2 ${product.state === 'active' && "bg-red-200"}`}>
-              <span>{product.product}</span>
-              <Switch 
-                className="ml-2" 
-                checked={product.state === 'active'} 
-                onCheckedChange={() => switchProductState(product)}
-              />
+    (<Card className='flex flex-col bg-white/10 border-none'>
+      <h2 className="my-4 text-ib-light font-black uppercase">All products</h2>
+      <Tabs defaultValue="TRUMETA">
+        <TabsList className="w-full bg-transparent">
+          {brands.map((brand) => (
+            <TabsTrigger className="text-white" value={brand} key={brand}>{brand}</TabsTrigger>
+          ))}
+        </TabsList>
+        {brands.map((brand) => (
+          <TabsContent value={brand} key={brand}>
+            {productList.filter(product => product.brand === brand).map(product => (
+              <Card key={product.product} className={`flex items-center justify-between px-3 py-2 m-2 bg-white/10 text-ib-light border-none ${product.state === 'active' && "ring-2 ring-ib-light ring-inset" }`}>
+                <span>{product.product}</span>
+                <Switch 
+                  className="ml-2" 
+                  checked={product.state === 'active'} 
+                  onCheckedChange={() => switchProductState(product)}
+                />
             </Card>
-          </li>
+            ))}
+          </TabsContent>
         ))}
-      </ul>
+      </Tabs>
     </Card>)
   );
 }

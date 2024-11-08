@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 import { Card } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import deleteComments from "@/lib/utils/deleteComments";
 
 type CommentsListProps = {
     comments: string[];
@@ -28,20 +30,29 @@ function CommentsList({ comments }: CommentsListProps) {
     };
   }, []);
 
+  const flushComments = async () => {
+    try {
+      await deleteComments('https://products-switcher-api.onrender.com/comments');
+    } catch (error) {
+      console.error('Failed to flush comments', error);
+    }
+  }
+
   return (
-    (<Card className='flex flex-col'>
-      <h2 className="my-4">Comments</h2>
+    <Card className='flex flex-col bg-white/10 border-none'>
+      <h2 className="my-4 text-ib-light font-black uppercase">Comments</h2>
       <ul>
       {commentsList.map((comment, index) => (
         <li key={index} className="m-2">
-        <Card className="flex items-center justify-between px-3 py-2">
-          <span>{comment}</span>
-        </Card>
+            <Card className="flex items-center justify-between px-3 py-2 border-none bg-white/20 text-ib-light">
+            <span>{comment}</span>
+            </Card>
       </li>
 )
 )}
       </ul>
-    </Card>)
+      <Button className="m-2" variant="outline" onClick={() => flushComments()}>Flush comments</Button>
+    </Card>
   );
 }
 
