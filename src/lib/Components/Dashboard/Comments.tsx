@@ -3,13 +3,20 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import deleteComments from "@/lib/utils/deleteComments";
+import { useNavigate } from "react-router-dom";
+import { setCookie } from "../Login/Form";
+import Cookies from 'js-cookie';
 
 type CommentsListProps = {
     comments: string[];
   };
-function CommentsList({ comments }: CommentsListProps) {
+function Comments({ comments }: CommentsListProps) {
 
   const [ commentsList, setCommentsList] = useState(comments);
+
+  const userCookie = Cookies.get('IBAUTH');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (comments) {
@@ -38,11 +45,21 @@ function CommentsList({ comments }: CommentsListProps) {
     }
   }
 
+  const showFullComments = () => {
+    if (userCookie) {
+      setCookie(userCookie);
+      navigate('/comments');
+    }
+  }
+
   return (
-    <Card className='flex flex-col bg-white/10 border-none'>
+    <Card className='flex flex-col bg-white/10 border-none relative'>
+      <div className="absolute top-[6px] left-[6px]" onClick={() => showFullComments()}>
+        <img className="h-[40px]" src="/assets/plus-circle.svg"/>
+      </div>
       <h2 className="my-4 text-ib-light font-black uppercase">Comments</h2>
       <ul>
-      {commentsList.map((comment, index) => (
+      {commentsList.slice(-10).map((comment, index) => (
         <li key={index} className="m-2">
             <Card className="flex items-center justify-between px-3 py-2 border-none bg-white/20 text-ib-light">
             <span>{comment}</span>
@@ -56,4 +73,4 @@ function CommentsList({ comments }: CommentsListProps) {
   );
 }
 
-export default CommentsList;
+export default Comments;

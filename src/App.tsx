@@ -3,6 +3,7 @@ import './App.css'
 import Form from './lib/Components/Login/Form'
 import Dashboard from './lib/Components/Dashboard/Dashboard';
 import { DataProvider } from './lib/Context/DataContext';
+import CommentsList from './lib/Components/Dashboard/CommentsList';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Form />} />
           <Route path="/dashboard" element={<Dashboard />}/>
+          <Route path="/comments" element={<CommentsList />}/>
         </Routes>
       </Router>
     </DataProvider>

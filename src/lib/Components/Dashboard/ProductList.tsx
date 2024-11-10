@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Cookies from 'js-cookie';
+import { useToast } from "@/hooks/use-toast"
 
 import { Switch } from "@/components/ui/switch";
 import { Card } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Clip from "./Clip";
 
 import updateData from "@/lib/utils/updateData";
 import updateComments from "@/lib/utils/updateComments";
@@ -27,6 +29,10 @@ function ProductList({ products }: ProductListProps) {
   const [ productList, setProductList] = useState<Product[]>(products);
   const [ brands, setBrands ] = useState<brandLisType>([]);
 
+  const userCookie = Cookies.get('IBAUTH');
+
+  const { toast } = useToast()
+
   useEffect(() => {
     if (products) {
       setProductList(products);
@@ -37,8 +43,6 @@ function ProductList({ products }: ProductListProps) {
   }, [products]);
 
   const switchProductState = async (product: Product) => {
-
-    const userCookie = Cookies.get('IBAUTH');
 
     if (userCookie && typeof userCookie === "string" && (product.owner === userCookie || product.owner === "none")) {
       const newState = product.state === "active" ? "inactive" : "active";
@@ -59,8 +63,6 @@ function ProductList({ products }: ProductListProps) {
         await updateComments('https://products-switcher-api.onrender.com/comments', {
           comment: `${product.brand} ${product.product} set to ${newState} by ${userCookie}`
         });
-
-        console.log(`Successfully updated product ${product.product} to ${newState}`);
       } catch (error) {
         console.error(`Failed to update product ${product.product}`, error);
         
@@ -69,7 +71,9 @@ function ProductList({ products }: ProductListProps) {
         );
       }
     } else {
-      alert(`${product.product} can only be updated by owner`)
+      toast({
+        title: `${product.brand} ${product.product} can only be updated by owner`,
+      })
       return;
     }
   };
@@ -101,11 +105,16 @@ function ProductList({ products }: ProductListProps) {
             {productList.filter(product => product.brand === brand).map(product => (
               <Card key={product.product} className={`flex items-center justify-between px-3 py-2 m-2 bg-white/10 text-ib-light border-none ${product.state === 'active' && "ring-2 ring-ib-light ring-inset" }`}>
                 <span>{product.product}</span>
-                <Switch 
-                  className="ml-2" 
-                  checked={product.state === 'active'} 
-                  onCheckedChange={() => switchProductState(product)}
-                />
+                <div className="flex flex-row">
+                  {(product.owner === userCookie) && 
+                    <Clip text={product.repo}/>
+                  }
+                  <Switch 
+                    className="ml-2" 
+                    checked={product.state === 'active'} 
+                    onCheckedChange={() => switchProductState(product)}
+                  />
+                </div>
             </Card>
             ))}
           </TabsContent>

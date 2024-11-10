@@ -5,6 +5,7 @@ import ProductList from './ProductList';
 import TakenProducts from './TakenProducts';
 import { DataContext } from '@/lib/Context/DataContext';
 import Comments from './Comments';
+import { Toaster } from "@/components/ui/toaster"
 
 function Dashboard() {
 
@@ -41,6 +42,7 @@ function Dashboard() {
             <Suspense fallback={<p>Loading products...</p>}>
               <TakenProducts products={products}/>
             </Suspense>
+            <Toaster/>
           </div>  
         </div>
       </div>

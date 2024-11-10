@@ -10,7 +10,7 @@ import NameInput from "./NameInput";
 
 Cookies.remove('IBAUTH');
 
-const setCookie = (name: string) => {
+export const setCookie = (name: string) => {
     Cookies.set('IBAUTH', `${name}`, { expires: 1 });
 }
 
