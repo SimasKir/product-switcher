@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { useEffect, useContext, Suspense } from 'react';
+import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductList from './ProductList';
 import TakenProducts from './TakenProducts';
@@ -31,17 +31,23 @@ function Dashboard() {
             { userCookie ? <h1 className='py-4 text-left text-ib-light text-4xl lg:text-5xl font-black'>Hello, {userCookie}!</h1> : <h1 className='my-4'>Error logging in</h1> }
           </div>
           <div className="grid grid-cols-1 px-4 mb-4">
-            <Suspense fallback={<p>Loading products...</p>}>
-              <ProductList products={products} />
-            </Suspense>
+          {products ? (
+            <ProductList products={products} />
+          ) : (
+            <p>Loading products...</p>
+          )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
-            <Suspense fallback={<p>Loading products...</p>}>
-              <Comments comments={comments}/>
-            </Suspense>
-            <Suspense fallback={<p>Loading products...</p>}>
-              <TakenProducts products={products}/>
-            </Suspense>
+          {comments ? (
+            <Comments comments={comments} />
+          ) : (
+            <p>Loading comments...</p>
+          )}
+          {products ? (
+            <TakenProducts products={products} />
+          ) : (
+            <p>Loading taken products...</p>
+          )}
             <Toaster/>
           </div>  
         </div>
