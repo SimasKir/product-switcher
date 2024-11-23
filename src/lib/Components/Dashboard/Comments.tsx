@@ -6,10 +6,8 @@ import deleteComments from "@/lib/utils/deleteComments";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "../Login/Form";
 import Cookies from 'js-cookie';
+import { CommentsListProps } from "@/lib/utils/Types";
 
-type CommentsListProps = {
-    comments: string[];
-  };
 function Comments({ comments }: CommentsListProps) {
 
   const [ commentsList, setCommentsList] = useState(comments);

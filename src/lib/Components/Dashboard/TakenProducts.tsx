@@ -1,7 +1,7 @@
 
-import { ProductListProps, Product } from "./ProductList";
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
+import { ProductListProps, Product } from "@/lib/utils/Types";
 
 const TakenProducts = ({ products }: ProductListProps) => {
 

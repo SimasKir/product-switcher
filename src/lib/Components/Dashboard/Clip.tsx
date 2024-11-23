@@ -1,8 +1,5 @@
 import { useToast } from "@/hooks/use-toast"
-
-type ClipProps = {
-  text: string;
-}
+import { ClipProps } from "@/lib/utils/Types";
 
 const Clip = ({text} : ClipProps) => {
 

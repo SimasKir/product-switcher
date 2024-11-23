@@ -9,20 +9,7 @@ import Clip from "./Clip";
 
 import updateData from "@/lib/utils/updateData";
 import updateComments from "@/lib/utils/updateComments";
-
-export type ProductListProps = {
-  products: Product[];
-}
-
-export type Product = {
-  brand: string,
-  product: string;
-  repo: string,
-  state: "active" | "inactive";
-  owner: string;
-}
-
-type brandLisType = string[];
+import { ProductListProps, brandLisType, Product } from "@/lib/utils/Types";
 
 function ProductList({ products }: ProductListProps) {
 
