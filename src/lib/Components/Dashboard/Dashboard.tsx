@@ -31,7 +31,7 @@ function Dashboard() {
             { userCookie ? <h1 className='py-4 text-left text-ib-light text-4xl lg:text-5xl font-black'>Hello, {userCookie}!</h1> : <h1 className='my-4'>Error logging in</h1> }
           </div>
           <div className="grid grid-cols-1 px-4 mb-4">
-          {products ? (
+          {products.length !== 0 ? (
             <ProductList products={products} />
           ) : (
             <p>Loading products...</p>
@@ -43,7 +43,7 @@ function Dashboard() {
           ) : (
             <p>Loading comments...</p>
           )}
-          {products ? (
+          {products.length !== 0 ? (
             <TakenProducts products={products} />
           ) : (
             <p>Loading taken products...</p>

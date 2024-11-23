@@ -60,7 +60,7 @@ function Comments({ comments }: CommentsListProps) {
       <h2 className="my-4 text-ib-light font-black uppercase">Comments</h2>
       <ul>
       {commentsList.slice(-10).map((comment, index) => (
-        <li key={index} className={`m-2${index === 0 ? ' opacity-25' : ''}${index === 1 ? ' opacity-50' : ''}${index === 2 ? ' opacity-75' : ''}`}>
+        <li key={index} className={`m-2${index === 0 && commentsList.length === 2 ? ' opacity-75' : ''}${index === 0 && commentsList.length === 3 ? ' opacity-50' : ''}${index === 0 && commentsList.length > 3 ? ' opacity-25' : ''}${index === 1 && commentsList.length === 3 ? ' opacity-75' : ''}${index === 1 && commentsList.length > 3 ? ' opacity-50' : ''}${index === 2 && commentsList.length > 3 ? ' opacity-75' : ''}`}>
             <Card className="flex items-center justify-between px-3 py-2 border-none bg-white/20 text-ib-light">
             <span>{comment}</span>
             </Card>
